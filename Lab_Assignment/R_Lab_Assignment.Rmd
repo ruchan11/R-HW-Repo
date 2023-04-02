@@ -1,6 +1,6 @@
 ---
 title: "DS311 - R Lab Assignment"
-author: "Your Name"
+author: "Russell Chan"
 date: "`r Sys.Date()`"
 output: 
   html_document:

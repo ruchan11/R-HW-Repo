@@ -1,10 +1,11 @@
 ---
 title: "DS311 - Basic R Lab Exercise"
-author: "Replace with Your Name"
+author: "Russell Chan"
 date: "1/10/2023"
 output:
-  pdf_document: default
   html_document: default
+  word_document: default
+  pdf_document: default
 subtitle: R Lab Exercise
 ---
 
@@ -205,7 +206,7 @@ getwd()
 
 ### Installing and Loading Packages
 
-```{r, include=FALSE}
+```{r}
 # Install a new package, note the quotation marks
 # install.packages("mass")
 
@@ -213,19 +214,19 @@ getwd()
 # install.packages(c("dplyr", "ggplot2"))
 
 # Loading the package, note no quotation marks
- library(dplyr)
+# library(dplyr)
 
 # Checking the package version
- packageVersion("dplyr")
+# packageVersion("dplyr")
 
 # List all functions in a package
 # ls("package:ggplot2")
 
 # Loading a function from package
- ggplot2::geom_line
+# ggplot2::geom_line
 
 # Update all packages
- update.packages()
+# update.packages()
 
 # Unload a package
 # detach(package:ggplot2, unload=TRUE)
