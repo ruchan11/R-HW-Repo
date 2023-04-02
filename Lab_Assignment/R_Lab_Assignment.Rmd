@@ -1,0 +1,253 @@
+---
+title: "DS311 - R Lab Assignment"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    theme: united
+    highlight: tango
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Assignment 1
+
+* In this assignment, we are going to apply some of the build in data set in R for descriptive statistics analysis.
+* To earn full grade in this assignment, students need to complete the coding tasks for each question to get the result.
+* After finished all the questions, knit the document into HTML format for submission.
+
+### Question 1
+
+Using the **mtcars** data set in R, please answer the following questions.
+
+```{r}
+# Loading the data
+data(mtcars)
+
+# Head of the data set
+head(mtcars)
+```
+
+a. Report the number of variables and observations in the data set.
+
+```{r}
+# Enter your code here!
+obs = nrow(mtcars)
+vars = ncol(mtcars)
+
+# Answer:
+cat("There are total of ", vars," variables and ", obs, " observations in this data set.")
+```
+
+
+
+b. Print the summary statistics of the data set and report how many discrete and continuous variables are in the data set.
+
+```{r}
+# Enter your code here!
+summary(mtcars)
+
+
+n_continuous <- sum(sapply(mtcars, is.double))
+n_discrete <- ncol(mtcars) - n_continuous
+# Answer:
+cat("There are ",n_discrete," discrete variables and ",n_continuous," continuous variables in this data set.")
+```
+
+c. Calculate the mean, variance, and standard deviation for the variable **mpg** and assign them into variable names m, v, and s. Report the results in the print statement.
+
+```{r}
+# Enter your code here!
+m = mean(mtcars$mpg)
+v = var(mtcars$mpg)
+s = sd(mtcars$mpg)
+
+
+
+ print(paste("The average of Mile Per Gallon from this data set is ", m , " with variance ", v , " and standard deviation", s , "."))
+```
+
+
+
+d. Create two tables to summarize 1) average mpg for each cylinder class and 2) the standard deviation of mpg for each gear class.
+
+```{r}
+# Enter your code here!
+avg_mpg_cylinder = aggregate(mpg~cyl, mtcars, mean)
+sd_mpg_gear = aggregate(mpg~gear, mtcars, sd)
+
+avg_mpg_cylinder
+sd_mpg_gear
+
+```
+
+
+
+e. Create a crosstab that shows the number of observations belong to each cylinder and gear class combinations. The table should show how many observations given the car has 4 cylinders with 3 gears, 4 cylinders with 4 gears, etc. Report which combination is recorded in this data set and how many observations for this type of car.
+
+```{r}
+# Enter your code here!
+crosstab = table(mtcars$cyl,mtcars$gear,
+                 dnn = c("Cylinders","Gears"))
+crosstab
+
+
+print("The most common car type in this data set is car with __8__ cylinders and __3__ gears. There are total of ___12__ cars belong to this specification in the data set.")
+```
+
+
+*** 
+
+### Question 2
+
+Use different visualization tools to summarize the data sets in this question.
+
+a. Using the **PlantGrowth** data set, visualize and compare the weight of the plant in the three separated group. Give labels to the title, x-axis, and y-axis on the graph. Write a paragraph to summarize your findings.
+
+```{r}
+# Load the data set
+data("PlantGrowth")
+
+# Head of the data set
+(PlantGrowth)
+
+# Enter your code here!
+boxplot(weight ~ group,PlantGrowth, 
+        main = "Weight of Plants by Group",
+        xlab = "Group", ylab = "Weight")
+
+```
+
+Result:
+
+=> Report a paragraph to summarize your findings from the plot!
+
+The ctrl group has a range between 3.2 and 6.1, with a median of 5.1.
+The trt1 group has a range between 3.6 and 5.9, with a median of 4.5.
+The trt2 group has a range between 4.9 and 6.2, with a median of 5.2. Of the groups, the one that generally yielded the highest plant weights was the trt2 group. 
+
+
+b. Using the **mtcars** data set, plot the histogram for the column **mpg** with 10 breaks. Give labels to the title, x-axis, and y-axis on the graph. Report the most observed mpg class from the data set.
+
+```{r}
+
+hist(mtcars$mpg, breaks = 10,
+     main = "Distribution of MPG",
+     xlab = "MPG",
+     ylab = "Frequency")
+
+print("Most of the cars in this data set are in the class of ___15___ mile per gallon.")
+```
+
+
+
+c. Using the **USArrests** data set, create a pairs plot to display the correlations between the variables in the data set. Plot the scatter plot with **Murder** and **Assault**. Give labels to the title, x-axis, and y-axis on the graph. Write a paragraph to summarize your results from both plots.
+
+```{r}
+# Load the data set
+data("USArrests")
+
+# Head of the data set
+head(USArrests)
+
+# Enter your code here!
+
+#pairs plot
+pairs(USArrests,
+      main = "Pairs Plot")
+
+#scatter plot of murder and assualt
+plot(USArrests$Murder, USArrests$Assault,
+     main = "Scatter Plot of Murder and Assault",
+     xlab = "Murder", ylab = "Assault")
+
+```
+
+Result:
+
+=> Report a paragraph to summarize your findings from the plot!
+
+The pairs plot shows a slight association between murder and assault, and murder and rape. UrbanPop had the least association with the other variables. 
+
+The scatterplot between murder and assault show a positive linear relationship. As the number of assaults increase, so will murder numbers. 
+
+
+***
+
+### Question 3
+
+Download the housing data set from www.jaredlander.com and find out what explains the housing prices in New York City.
+
+Note: Check your working directory to make sure that you can download the data into the data folder. 
+
+```{r, echo=FALSE}
+# Load and clean the housing data set 
+download.file(url='https://www.jaredlander.com/data/housing.csv',
+              destfile='data/housing.csv', mode='wb')
+housingData <- read.csv('data/housing.csv')
+housingData <- subset(housingData, 
+                      select = c("Neighborhood", "Market.Value.per.SqFt", "Boro", "Year.Built"))
+housingData <- na.omit(housingData)                   
+```
+
+a. Create your own descriptive statistics and aggregation tables to summarize the data set and find any meaningful results between different variables in the data set.
+
+```{r}
+# Head of the cleaned data set
+head(housingData)
+
+# Enter your code here!
+summary(housingData$Market.Value.per.SqFt)
+
+table(housingData$Neighborhood)
+
+#mean market value by neighborhood
+nbrhd_value = aggregate(housingData$Market.Value.per.SqFt, by = list(housingData$Neighborhood), mean)
+nbrhd_value
+
+#mean market value by borough
+boro_value = aggregate(housingData$Market.Value.per.SqFt,by = list(housingData$Boro), mean)
+boro_value
+```
+
+b. Create multiple plots to demonstrates the correlations between different variables. Remember to label all axes and give title to each graph.
+
+```{r}
+# Enter your code here!
+library(ggplot2)
+
+# Plot market value vs. year built
+ggplot(housingData, aes(x = Year.Built, y = Market.Value.per.SqFt)) +
+  geom_point() +
+  labs(title = "Market Value vs. Year Built",
+       x = "Year Built",
+       y = "Market Value per Sq. Ft.")
+
+# Plot market value vs. borough
+ggplot(housingData, aes(x = Boro, y = Market.Value.per.SqFt)) +
+  geom_boxplot() +
+  labs(title = "Market Value by Borough",
+       x = "Borough",
+       y = "Market Value per Sq. Ft.")
+
+# Plot market value vs. neighborhood
+ggplot(housingData, aes(x = Neighborhood, y = Market.Value.per.SqFt)) +
+  geom_bar(stat = "summary", fun = "mean") +
+  labs(title = "Mean Market Value by Neighborhood",
+       x = "Neighborhood",
+       y = "Mean Market Value per Sq. Ft.")
+
+
+```
+
+c. Write a summary about your findings from this exercise.
+
+=> Enter your answer here!
+
+The data has many different neighborhoods, and its difficult comparing them all, so most of my findings will be from the boroughs and market value. Aggregating the mean market value by boroughs revealed Manhatten is more than twice as costly as the other boroughs mean market value. 
+
+The plot of market value and year built doesn't show much, the value is evenly spread regardless of year built after 1900. The box plot of market value in boroughs show the severity in market value discrepancy with Manhattan looming over the others. 
+
